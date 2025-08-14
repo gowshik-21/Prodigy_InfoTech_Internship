@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRODIGY_WD_01</title>
+    <style>
+        body {
+            margin: 0;
+            height: 200vh;
+            scroll-behavior: smooth;
+        }
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 50px;
+            background-color: #3498db;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            transition: background-color 1s;
+        }
+        .navbar-item {
+            flex: 1;
+            text-align: center;
+            cursor: pointer;
+        }
+        #home {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            color: black;
+            font-family: Arial, sans-serif;
+        }
+        .contact-section {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: black;
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .social-links a {
+            color: white;
+            text-decoration: none;
+            margin: 10px;
+            font-size: 18px;
+        }
+        .social-links a:hover {
+            color: blue; /* Change color on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-item" onclick="scrollToSection('home')">Home</div>
+        <a href="https://www.canva.com/design/DAFpRxy47kU/w9nxlJ4_CSLwekIRa0ttbg/view#11" style="color: white; text-decoration: none;">PRODIGY_WD_01</a>
+        <div class="navbar-item" onclick="scrollToSection('contact')">Contact</div>
+    </div>
+    
+    <div id="home">
+        <h1>Welcome to PRODIGY_WD_01</h1>
+        <ul>
+            <li>Developed a dynamic webpage featuring a navigation bar titled "PRODIGY_WD_01".</li>
+            <li>Provides an engaging user experience through interactive color changes.</li>
+            <li>Designed with a significant vertical height for ample scrolling.</li>
+            <li>Created a fixed navigation bar that remains at the top during scrolling.</li>
+            <li>Utilized CSS to define the navbar's initial color.</li>
+            <li>Employed JavaScript to change the navbar's background color on scroll.</li>
+            <li>Implemented an array of colors for seamless loop transitions.</li>
+            <li>This interactive feature enhances the visual appeal and browsing experience.</li>
+        </ul>
+    </div>
+    
+    <div id="contact" class="contact-section">
+        <h2>Contact Me</h2>
+        <br>
+        <div class="social-links">
+            <a href="https://www.linkedin.com/in/gowtham-raj-t-354a4328b/" target="_blank">LinkedIn</a>
+            <a href="https://github.com/GowthamRajT" target="_blank">GitHub</a>
+        </div>
+        <br>
+        <h3>Thanks for viewing my Page!</h3>
+    </div>
+
+    <script>
+        const navbar = document.querySelector('.navbar');
+        const colors = ['red', 'black', 'yellow', 'green', 'orange', 'violet', 'blue'];
+        let currentColorIndex = 0;
+
+        window.addEventListener('scroll', () => {
+            currentColorIndex = (currentColorIndex + 1) % colors.length;
+            navbar.style.backgroundColor = colors[currentColorIndex];
+        });
+
+        function scrollToSection(section) {
+            const element = document.getElementById(section);
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
