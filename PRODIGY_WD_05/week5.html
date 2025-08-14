@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Search for Indian Cities</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f0f4f8;
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url('image.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        h1 {
+            color: #007BFF;
+        }
+        #city-input {
+            padding: 10px;
+            width: 250px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #weather-info {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <center>
+        <h1>Check Weather of an Indian City</h1>
+        <input type="text" id="city-input" placeholder="Enter city name (e.g., Delhi)">
+        <button onclick="getWeather()">Get Weather</button>
+        <div id="weather-info"></div>
+    </center>
+
+    <script>
+        
+        const cities = [
+            { name: "Delhi", latitude: 28.6791, longitude: 77.0697 },
+            { name: "Mumbai", latitude: 19.0760, longitude: 72.8774 },
+            { name: "Bangalore", latitude: 12.9716, longitude: 77.5946 },
+            { name: "Hyderabad", latitude: 17.3850, longitude: 78.4867 },
+            { name: "Chennai", latitude: 13.0827, longitude: 80.2707 },
+            { name: "Kolkata", latitude: 22.5726, longitude: 88.3639 },
+            { name: "Ahmedabad", latitude: 23.0225, longitude: 72.5714 },
+            { name: "Pune", latitude: 18.5204, longitude: 73.8567 },
+            { name: "Jaipur", latitude: 26.9124, longitude: 75.7873 },
+            { name: "Lucknow", latitude: 26.8467, longitude: 80.9462 },
+            { name: "Indore", latitude: 22.7196, longitude: 75.8577 },
+            { name: "Patna", latitude: 25.5941, longitude: 85.1376 },
+            { name: "Bhopal", latitude: 23.2599, longitude: 77.4126 },
+            { name: "Agra", latitude: 27.1767, longitude: 78.0081 },
+            { name: "Thiruvananthapuram", latitude: 8.5241, longitude: 76.9366 }
+        ];
+
+        const cityWeatherData = {};
+       
+        async function fetchAndStoreWeather() {
+            for (const city of cities) {
+                const url = `https://api.open-meteo.com/v1/forecast?latitude=${city.latitude}&longitude=${city.longitude}&daily=temperature_2m_max,temperature_2m_min&timezone=Asia/Kolkata`;
+                const response = await fetch(url);
+                const data = await response.json();
+                cityWeatherData[city.name.toLowerCase()] = data.daily;
+            }
+        }
+
+       
+        async function getWeather() {
+            const cityInput = document.getElementById("city-input").value.toLowerCase();
+            const weatherContainer = document.getElementById("weather-info");
+            weatherContainer.innerHTML = "";
+
+            if (Object.keys(cityWeatherData).length === 0) {
+                await fetchAndStoreWeather();
+            }
+
+            const weather = cityWeatherData[cityInput];
+            if (weather) {
+                const maxTemp = weather.temperature_2m_max[0];
+                const minTemp = weather.temperature_2m_min[0];
+                weatherContainer.innerHTML = `
+                    <h2>Weather in ${cityInput.charAt(0).toUpperCase() + cityInput.slice(1)}</h2>
+                    <p>Max Temperature: ${maxTemp}°C</p>
+                    <p>Min Temperature: ${minTemp}°C</p>
+                `;
+            } else {
+                weatherContainer.innerHTML = `<p>City not found in the database.</p>`;
+            }
+        }
+
+        window.onload = fetchAndStoreWeather;
+    </script>
+</body>
+</html>

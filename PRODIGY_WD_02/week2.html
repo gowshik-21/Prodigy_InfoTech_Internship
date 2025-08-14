@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch Web Application</title>
+</head>
+
+<body>
+
+    <style>
+        body {
+                font-family: Georgia, 'Times New Roman', Times, serif;
+                display: flex;
+                flex-direction: column; 
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+                background-image: url('background2.jpg');
+                background-size: cover;
+            }
+    
+            .navbar {
+                width: 100%;
+                background-color: rgb(255, 234, 0);
+                color: white;
+                padding: 8px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                position: absolute; 
+                top: 0;
+                left: 0;
+                z-index: 1000; 
+            }
+    
+            .navbar a {
+                color: rgb(0, 0, 0);
+                text-decoration: none;
+                margin: 0 10px;
+                transition: color 0.3s;
+            }
+    
+            .navbar a:hover {
+                color: #6aff00; 
+            }
+    
+            .stopwatch {
+                background-image: url('background.jpg');
+                background-size: cover;
+                color: white;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                text-align: center;
+                width: 90%;
+                max-width: 500px;
+                position: relative; 
+                z-index: 1; 
+            }
+    
+            #display {
+                font-size: 48px;
+                margin-bottom: 20px;
+            }
+    
+            .controls {
+                margin-bottom: 20px;
+            }
+    
+            button {
+                margin: 0 5px;
+                padding: 10px 15px;
+                font-size: 16px;
+                cursor: pointer;
+                border: none;
+                border-radius: 5px;
+                background-color: #6aff00;
+                color: rgb(0, 0, 0);
+                transition: background-color 0.3s;
+            }
+    
+            button:hover {
+                background-color: #0056b3;
+            }
+    
+            #laps {
+                margin-top: 20px;
+            }
+    
+            #lapList {
+                list-style-type: none;
+                padding: 0;
+            }
+    
+            @media (max-width: 600px) {
+                #display {
+                    font-size: 36px;
+                }
+    
+                button {
+                    padding: 8px 12px;
+                    font-size: 14px;
+                }
+            }
+    
+            @media (max-width: 400px) {
+                #display {
+                    font-size: 28px;
+                }
+    
+                button {
+                    padding: 6px 10px;
+                    font-size: 12px;
+                }
+            }
+        </style>
+
+    <div class="navbar">
+        <a href="https://github.com/GowthamRajT" target="_blank">GitHub</a>
+        <a href="https://www.canva.com/design/DAFpRxy47kU/w9nxlJ4_CSLwekIRa0ttbg/view#12">PRODIGY_WD_02</a>
+        <a href="https://www.linkedin.com/in/gowtham-raj-t-354a4328b/" target="_blank">LinkedIn</a>
+    </div>
+
+    <div class="stopwatch">
+        <h1>Welcome to my Stopwatch Application!</h1>
+        <div id="display">00:00:00</div>
+        <div class="controls">
+            <button id="start">Start</button>
+            <button id="pause">Pause</button>
+            <button id="reset">Reset</button>
+            <button id="lap">Lap</button>
+        </div>
+        <div id="laps">
+            <h3>Lap Times:</h3>
+            <ul id="lapList"></ul>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/loaders/GLTFLoader.js"></script>
+
+    <script>
+        let startTime, updatedTime, difference, tInterval;
+        let running = false;
+        let laps = [];
+        const display = document.getElementById('display');
+        const lapList = document.getElementById('lapList');
+
+        function startTimer() {
+            if (!running) {
+                startTime = new Date().getTime() - (difference || 0);
+                tInterval = setInterval(updateTime, 10);
+                running = true;
+            }
+        }
+
+        function updateTime() {
+            updatedTime = new Date().getTime();
+            difference = updatedTime - startTime;
+
+            let hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            let minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            let seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+            display.innerHTML = (hours < 10 ? "0" + hours : hours) + ":" +
+                                (minutes < 10 ? "0" + minutes : minutes) + ":" +
+                                (seconds < 10 ? "0" + seconds : seconds);
+        }
+
+        function pauseTimer() {
+            clearInterval(tInterval);
+            running = false;
+        }
+
+        function resetTimer() {
+            clearInterval(tInterval);
+            running = false;
+            difference = 0;
+            display.innerHTML = "00:00:00";
+            lapList.innerHTML = '';
+            laps = [];
+        }
+
+        function recordLap() {
+            if (running) {
+                laps.push(display.innerHTML);
+                const lapItem = document.createElement('li');
+                lapItem.textContent = `Lap ${laps.length}: ${display.innerHTML}`;
+                lapList.appendChild(lapItem);
+            }
+        }
+
+        document.getElementById('start').addEventListener('click', startTimer);
+        document.getElementById('pause').addEventListener('click', pauseTimer);
+        document.getElementById('reset').addEventListener('click', resetTimer);
+        document.getElementById('lap').addEventListener('click', recordLap);
+    </script>
+</body>
+</html>
